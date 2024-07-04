@@ -15,6 +15,9 @@ Methods:
 from typing import List, Tuple
 import logging
 import re
+import os
+import mysql.connector
+from mysql.connector import connection
 
 
 PII_FIELDS: Tuple[str, ...] = ('name', 'email', 'phone', 'ssn', 'password')
@@ -65,3 +68,22 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
 
     return logger
+
+
+def get_db() -> connection.MySQLConnection:
+    '''Connects to a secure holberton database.
+    and returns the connection object.
+    '''
+    # Retrieve credentials from environment variables with defaults
+    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    database = os.getenv('PERSONAL_DATA_DB_NAME')
+
+    # Establish and return the database connection
+    return mysql.connector.connect(
+        user=username,
+        password=password,
+        host=host,
+        database=database
+    )
