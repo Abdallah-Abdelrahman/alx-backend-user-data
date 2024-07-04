@@ -71,9 +71,8 @@ def get_logger() -> logging.Logger:
 
 
 def get_db() -> connection.MySQLConnection:
-    '''Connects to a secure holberton database.
-    and returns the connection object.
-    '''
+    '''Connects to a secure holberton database.'''
+
     # Retrieve credentials from environment variables with defaults
     username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
     password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
@@ -87,3 +86,21 @@ def get_db() -> connection.MySQLConnection:
         host=host,
         database=database
     )
+
+
+def main() -> None:
+    '''Main function to retrieve and display users from the database.'''
+    logger = get_logger()
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    query = 'SELECT * FROM users;'
+    cursor.execute(query)
+
+    for row in cursor:
+        log_message = '; '.join([f'{key}={value}'
+                                 for key, value in row.items()])
+        logger.info(log_message)
+
+    cursor.close()
+    db.close()
