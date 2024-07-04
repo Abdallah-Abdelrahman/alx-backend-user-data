@@ -70,22 +70,22 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> connection.MySQLConnection:
-    '''Connects to a secure holberton database.'''
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    '''
+    Establishes a connection to the database.
 
-    # Retrieve credentials from environment variables with defaults
-    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
-    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
-    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
-    database = os.getenv('PERSONAL_DATA_DB_NAME')
-
-    # Establish and return the database connection
-    return mysql.connector.connect(
-        user=username,
-        password=password,
-        host=host,
-        database=database
+    Returns:
+        Database connection object.
+    '''
+    connection = mysql.connector.connection.MySQLConnection(
+        user=os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root'),
+        password=os.environ.get('PERSONAL_DATA_DB_PASSWORD', ''),
+        host=os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
+        database=os.environ.get('PERSONAL_DATA_DB_NAME'),
+        port=3306
     )
+
+    return connection
 
 
 def main() -> None:
