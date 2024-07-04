@@ -12,9 +12,12 @@ Methods:
         Returns:
             str: log message obfuscated
 '''
-from typing import List
+from typing import List, Tuple
 import logging
 import re
+
+
+PII_FIELDS: Tuple[str, ...] = ('name', 'email', 'phone', 'ssn', 'password')
 
 
 def filter_datum(fields: List[str],
@@ -46,3 +49,19 @@ class RedactingFormatter(logging.Formatter):
                             self.REDACTION,
                             super().format(record),
                             self.SEPARATOR)
+
+
+def get_logger() -> logging.Logger:
+    '''Creates and returns a logger with the specified settings'''
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    # Create a StreamHandler
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(RedactingFormatter(fields=PII_FIELDS))
+
+    # Add the handler to the logger
+    logger.addHandler(stream_handler)
+
+    return logger
