@@ -12,14 +12,15 @@ Methods:
         Returns:
             str: log message obfuscated
 '''
-from re import sub
 from typing import List
+import re
 
 
 def filter_datum(fields: List[str],
                  redaction: str,
                  message: str, separator: str) -> str:
     '''returns the log message obfuscated'''
-    return sub('|'.join('(?<={}=)[^{}]+'.format(f, separator) for f in fields),
-               redaction,
-               message)
+    return re.sub(
+            '|'.join('(?<={}=)[^{}]+'.format(f, separator) for f in fields),
+            redaction,
+            message)
