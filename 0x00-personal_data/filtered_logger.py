@@ -12,12 +12,12 @@ Methods:
         Returns:
             str: log message obfuscated
 '''
-from typing import List, Tuple
 import logging
-import re
 import os
+import re
+from typing import List, Tuple
 import mysql.connector
-
+from mysql.connector.cursor import MySQLCursorDict
 
 PII_FIELDS: Tuple[str, ...] = ('name', 'email', 'phone', 'ssn', 'password')
 
