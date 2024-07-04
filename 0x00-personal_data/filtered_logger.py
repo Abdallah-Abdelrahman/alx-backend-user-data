@@ -17,7 +17,6 @@ import logging
 import re
 import os
 import mysql.connector
-from mysql.connector import connection
 
 
 PII_FIELDS: Tuple[str, ...] = ('name', 'email', 'phone', 'ssn', 'password')
