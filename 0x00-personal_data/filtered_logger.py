@@ -33,54 +33,71 @@ def filter_datum(fields: List[str],
 
 
 class RedactingFormatter(logging.Formatter):
-    '''Redacting Formatter class
-    '''
+    """
+    Redacting Formatter class for obfuscating PII in logs.
+    """
 
-    REDACTION = '***'
-    FORMAT = '[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s'
-    SEPARATOR = ';'
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
-        '''Initialize the instance'''
+        """
+        Initialize the RedactingFormatter.
+
+        Args:
+            fields (List[str]): List of PII fields to obfuscate.
+        """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        '''filter values in incoming log records.'''
-        return filter_datum(self.fields,
-                            self.REDACTION,
-                            super().format(record),
-                            self.SEPARATOR)
+        """
+        Format the log record, obfuscating PII fields.
+
+        Args:
+            record (logging.LogRecord): The log record.
+
+        Returns:
+            str: The formatted log record with obfuscated PII fields.
+        """
+        return filter_datum(
+            self.fields, self.REDACTION,
+            super().format(record), self.SEPARATOR
+        ).rstrip(self.SEPARATOR) + self.SEPARATOR
 
 
 def get_logger() -> logging.Logger:
-    '''Creates and returns a logger with the specified settings'''
-    logger = logging.getLogger('user_data')
+    """
+    Creates and configures a logger for user data with PII redaction.
+
+    Returns:
+        logging.Logger: Configured logger with redaction formatter.
+    """
+    logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
-    # Create a StreamHandler
     stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(RedactingFormatter(fields=PII_FIELDS))
-
-    # Add the handler to the logger
+    formatter = RedactingFormatter(list(PII_FIELDS))
+    stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
 
     return logger
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    '''
+    """
     Establishes a connection to the database.
 
     Returns:
         Database connection object.
-    '''
+    """
     connection = mysql.connector.connection.MySQLConnection(
-        user=os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root'),
-        password=os.environ.get('PERSONAL_DATA_DB_PASSWORD', ''),
-        host=os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
-        database=os.environ.get('PERSONAL_DATA_DB_NAME'),
+        user=os.environ.get("PERSONAL_DATA_DB_USERNAME", "root"),
+        password=os.environ.get("PERSONAL_DATA_DB_PASSWORD", ""),
+        host=os.environ.get("PERSONAL_DATA_DB_HOST", "localhost"),
+        database=os.environ.get("PERSONAL_DATA_DB_NAME"),
         port=3306
     )
 
@@ -88,18 +105,22 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main() -> None:
-    '''Main function to retrieve and display users from the database.'''
+    """
+    Obtain a database connection using get_db and retrieve all rows
+    in the users table and display each row under a filtered format
+    """
+    db_connection = get_db()
+    cursor: MySQLCursorDict = db_connection.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users;")
     logger = get_logger()
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
-
-    query = 'SELECT * FROM users;'
-    cursor.execute(query)
 
     for row in cursor:
-        log_message = '; '.join([f'{key}={value}'
-                                 for key, value in row.items()])
+        log_message = "; ".join(f"{key}={value}" for key, value in row.items())
         logger.info(log_message)
 
     cursor.close()
-    db.close()
+    db_connection.close()
+
+
+if __name__ == "__main__":
+    main()
