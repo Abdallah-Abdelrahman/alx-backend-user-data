@@ -13,8 +13,8 @@ class Auth:
             return True
         if path[-1] == '/':
             path = path[:-1]
-        is_excluded = path in [p[:-1] if p[-1] == '/'\
-                else p for p in excluded_paths]
+        is_excluded = path in [p[:-1] if p[-1] == '/'
+                               else p for p in excluded_paths]
 
         return not is_excluded
 
