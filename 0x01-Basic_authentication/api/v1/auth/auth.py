@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''Module defines `Auth` class'''
-from typing import List
+from typing import List, TypeVar
 from flask import request
 
 
