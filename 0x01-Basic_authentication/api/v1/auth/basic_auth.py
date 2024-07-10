@@ -49,7 +49,10 @@ class BasicAuth(Auth):
             self, user_email: str, user_pwd: str) -> TypeVar('User'):
         '''returns the User instance based on his email and password'''
         if isinstance(user_email, str) and isinstance(user_email, str):
-            found_email = User.search({'email': user_email})
+            try:
+                found_email = User.search({'email': user_email})
+            except Exception:
+                return None
             # print(found_email)
             if len(found_email) <= 0:
                 return None
