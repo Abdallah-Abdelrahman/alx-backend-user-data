@@ -18,11 +18,18 @@ class Auth:
         is_excluded = path in [p[:-1] if p[-1] == '/'
                                else p for p in excluded_paths
                                if isinstance(p, str)]
-        for pattern in excluded_paths:
-            if '*' not in pattern:
+        for ex in excluded_paths:
+            if not isinstance(ex, str):
                 continue
-            pattern = pattern.replace("*", ".*")  # Convert wildcard to regex
-            if re.match(pattern, path):
+            pattern = ex.split('/')[-1]
+
+            if pattern[-1] != '*':
+                # skip regex matching
+                continue
+
+            if re.search(rf'{pattern.replace("*", ".*")}', path):
+                # to check agains trailing astrisk (*)
+                # ie: excluded_paths = ["/api/v1/stat*"]
                 return False
 
         return not is_excluded
