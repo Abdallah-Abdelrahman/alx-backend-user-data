@@ -43,7 +43,7 @@ class BasicAuth(Auth):
         if not decoded_ah\
                 or not isinstance(decoded_ah, str) or ':' not in decoded_ah:
             return (None, None)
-        return tuple(decoded_ah.split(':'))
+        return tuple(decoded_ah.split(':', 1))
 
     def user_object_from_credentials(
             self, user_email: str, user_pwd: str) -> TypeVar('User'):
