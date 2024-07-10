@@ -23,10 +23,14 @@ class Auth:
                 # skip regex matching
                 continue
 
-            if re.search(rf'{pattern}', path):
-                # to check agains trailing astrisk (*)
-                # ex: excluded_paths = ["/api/v1/stat*"]
-                return False
+            try:
+                if re.search(rf'{pattern}', path):
+                    # to check agains trailing astrisk (*)
+                    # ex: excluded_paths = ["/api/v1/stat*"]
+                    return False
+            except Exception as e:
+                # print(e)
+                pass
 
         return not is_excluded
 
