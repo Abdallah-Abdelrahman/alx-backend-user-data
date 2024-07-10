@@ -19,6 +19,10 @@ class Auth:
         for ex in excluded_paths:
             pattern = ex.split('/')[-1]
 
+            if pattern[-1] != '*':
+                # skip regex matching
+                continue
+
             if re.search(rf'{pattern}', path):
                 # to check agains trailing astrisk (*)
                 # ex: excluded_paths = ["/api/v1/stat*"]
