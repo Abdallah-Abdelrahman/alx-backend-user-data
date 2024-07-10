@@ -16,7 +16,7 @@ class Auth:
             path = path[:-1]
         is_excluded = path in [p[:-1] if p[-1] == '/'
                                else p for p in excluded_paths]
-        if re.match(path[-1], ' '.join([p[-1] for p in excluded_paths])):
+        if re.match(path, ' '.join([p for p in excluded_paths])):
             # to check agains trailing astrisk (*)
             # ex: excluded_paths = ["/api/v1/stat*"]
             return False
