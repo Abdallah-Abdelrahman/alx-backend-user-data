@@ -10,13 +10,17 @@ class Auth:
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         '''returns False'''
-        if not path or not excluded_paths:
+        if not path or not excluded_paths or len(excluded_paths) == 0:
             return True
         if path[-1] == '/':
             path = path[:-1]
+
         is_excluded = path in [p[:-1] if p[-1] == '/'
-                               else p for p in excluded_paths]
+                               else p for p in excluded_paths
+                               if isinstance(p, str)]
         for ex in excluded_paths:
+            if not isinstance(ex, str):
+                continue
             pattern = ex.split('/')[-1]
 
             if pattern[-1] != '*':
