@@ -1,6 +1,6 @@
 # Basic authentication
 
-Learning Objectives:
+## Learning Objectives:
 
 + What authentication means
 + What Base64 is
