@@ -17,8 +17,16 @@ auth = None
 if getenv('AUTH_TYPE'):
     from api.v1.auth.auth import Auth
     from api.v1.auth.basic_auth import BasicAuth
+    from api.v1.auth.session_auth import SessionAuth
 
-    auth = BasicAuth() if getenv('AUTH_TYPE') == 'basic_auth' else Auth()
+    AUTH = getenv('AUTH_TYPE')
+
+    if AUTH == 'session_auth':
+        auth = SessionAuth()
+    elif AUTH == 'basic_auth':
+        auth = BasicAuth()
+    else:
+        auth = Auth()
 
 
 @app.before_request
