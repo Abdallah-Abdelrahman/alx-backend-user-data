@@ -30,7 +30,7 @@ if getenv('AUTH_TYPE'):
     elif AUTH == 'session_exp_auth':
         auth = SessionExpAuth()
     elif AUTH == 'session_db_auth':
-        auth = SessionExpAuth
+        auth = SessionDBAuth
     else:
         auth = Auth()
 
