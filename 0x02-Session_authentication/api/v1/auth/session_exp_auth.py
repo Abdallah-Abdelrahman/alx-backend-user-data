@@ -10,10 +10,7 @@ class SessionAuth(SessionAuth):
     '''class definition'''
     def __init__(self):
         '''initialize the isntance'''
-        try:
-            self.session_duration = int(getenv('SESSION_DURATION'))
-        except Exception:
-            self.session_duration = 0
+        self.session_duration = int(getenv('SESSION_DURATION', 0))
 
     def create_session(self, user_id=None):
         '''Create a Session ID '''
