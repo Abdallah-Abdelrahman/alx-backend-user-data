@@ -36,6 +36,4 @@ class SessionExpAuth(SessionAuth):
         if (user_info.get('created_at')
                 + timedelta(seconds=self.session_duration) < datetime.now()):
             return None
-        if self.session_duration <= 0:
-            return user_info.get('user_id')
-        return None
+        return user_info.get('user_id')
