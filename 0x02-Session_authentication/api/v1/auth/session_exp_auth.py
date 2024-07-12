@@ -25,15 +25,14 @@ class SessionExpAuth(SessionAuth):
 
     def user_id_for_session_id(self, session_id=None):
         '''overload parent method'''
-        if not session_id:
-            return None
-        if session_id not in self.user_id_by_session_id:
-            return None
-        user_info = self.user_id_by_session_id.get(session_id)
-
-        if 'created_at' not in user_info:
-            return None
-        if (user_info.get('created_at')
-                + timedelta(seconds=self.session_duration) < datetime.now()):
-            return None
-        return user_info.get('user_id')
+        if session_id:
+            user_details = self.user_id_by_session_id.get(session_id)
+            if user_details and "created_at" in user_details:
+                if (
+                    self.session_duration <= 0
+                    or user_details["created_at"]
+                    + timedelta(seconds=self.session_duration)
+                    >= datetime.now()
+                ):
+                    return user_details.get("user_id")
+        return None
