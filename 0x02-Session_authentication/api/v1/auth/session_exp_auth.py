@@ -6,7 +6,7 @@ from models.user import User
 from datetime import datetime, timedelta
 
 
-class SessionAuth(SessionAuth):
+class SessionExpAuth(SessionAuth):
     '''class definition'''
     def __init__(self):
         '''initialize the isntance'''
