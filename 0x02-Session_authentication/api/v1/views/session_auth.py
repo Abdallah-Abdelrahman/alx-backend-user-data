@@ -25,8 +25,8 @@ def session_auth():
         session_id = auth.create_session(curr_user[0].id)
         response = jsonify(curr_user[0].to_json())
         session_name = getenv('SESSION_NAME')
-        # response.set_cookie(session_name, session_id)
-        session[session_name] = session_id
+        response.set_cookie(session_name, session_id)
+        # session[session_name] = session_id
         return response
     else:
         return jsonify({'error': 'wrong password'}), 401
