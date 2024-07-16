@@ -46,7 +46,7 @@ class DB:
         '''
         return self._session.query(User).filter_by(**kw).one()
 
-    def update_user(self, user_id, **kw: Dict[str, str]):
+    def update_user(self, user_id: int, **kw: Dict[str, str]):
         '''side effect to udpate a user'''
         user = self.find_user_by(id=user_id)
         if not user:
