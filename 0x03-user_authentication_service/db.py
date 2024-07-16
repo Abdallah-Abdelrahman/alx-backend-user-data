@@ -43,5 +43,4 @@ class DB:
         ''' returns the first row found in the users table.
         as filtered by the method’s input arguments
         '''
-        
         return self._session.query(User).filter_by(**kw).one()
