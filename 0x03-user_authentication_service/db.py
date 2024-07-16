@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''DB module
 '''
+from typing import Dict
 from sqlalchemy import create_engine
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
@@ -45,7 +46,7 @@ class DB:
         '''
         return self._session.query(User).filter_by(**kw).one()
 
-    def update_user(self, user_id, **kw):
+    def update_user(self, user_id, **kw: Dict[str, str]):
         '''side effect to udpate a user'''
         user = self.find_user_by(id=user_id)
         if not user:
