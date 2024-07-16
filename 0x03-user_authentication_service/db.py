@@ -51,6 +51,6 @@ class DB:
         if not user:
             return
         for k, v in kw.items():
-            if not hasattr(user, k):
+            if not hasattr(User, k):
                 raise ValueError
             setattr(user, k, v)
