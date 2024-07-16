@@ -44,3 +44,13 @@ class DB:
         as filtered by the method’s input arguments
         '''
         return self._session.query(User).filter_by(**kw).one()
+
+    def update_user(self, user_id, **kw):
+        '''side effect to udpate a user'''
+        user = self.find_user_by(id=user_id)
+        if not user:
+            return
+        for k, v in kw.items():
+            if not hasattr(user, k):
+                raise ValueError
+            setattr(user, k, v)
