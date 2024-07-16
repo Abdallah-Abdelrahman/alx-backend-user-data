@@ -1,4 +1,7 @@
 # User authentication service
+![meme](./authentication.png)
+
+developing authentication service for a backend from scratch (no library/module).
 
 ## Learning Objectives:
 
