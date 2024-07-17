@@ -13,7 +13,7 @@ def index():
     return jsonify({'message': 'Bienvenue'})
 
 
-@app.route('/users', methods='POST')
+@app.route('/users', methods=['POST'])
 def users():
     '''Register new user'''
     email = request.form.get('email')
