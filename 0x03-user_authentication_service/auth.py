@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 '''Module defines `_hash_password` function'''
+from sqlalchemy.orm.exc import NoResultFound
 from db import DB
 from user import User
 import bcrypt
@@ -20,8 +21,9 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> User:
         '''Add new user'''
-        if self._db.find_user_by(email=email):
+        try:
+            self._db.find_user_by(email=email)
             raise ValueError(f'User {email} already exists')
-        psw = _hash_password(password)
-
-        return self._db.add_user(email, str(psw))
+        except NoResultFound:
+            psw = _hash_password(password)
+            return self._db.add_user(email, str(psw))
