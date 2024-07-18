@@ -67,8 +67,9 @@ def profile():
 @app.route('/reset_password', methods=['POST'])
 def get_reset_password_token():
     '''Reset user's password route'''
+    email = request.form.get('email')
     try:
-        token = AUTH.get_reset_password_token(request.form.get('email'))
+        token = AUTH.get_reset_password_token(email)
     except ValueError:
         abort(403)
 
