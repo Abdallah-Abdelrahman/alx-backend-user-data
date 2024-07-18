@@ -32,7 +32,7 @@ class Auth:
         '''locating the user by email'''
         try:
             user = self._db.find_user_by(email=email)
-            hspsw_bytes = bytes(user.hashed_password)
-            return bcrypt.checkpw(password.encode('utf8'), hspsw_bytes)
+            return bcrypt.checkpw(password.encode('utf8'),
+                                  user.hashed_password)
         except NoResultFound:
             return False
