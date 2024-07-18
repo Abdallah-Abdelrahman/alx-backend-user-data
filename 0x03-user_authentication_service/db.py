@@ -3,11 +3,8 @@
 '''
 from typing import Dict
 from sqlalchemy import create_engine
-from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base, User
 
@@ -41,8 +38,12 @@ class DB:
         return user
 
     def find_user_by(self, **kw) -> User:
-        ''' returns the first row found in the users table.
-        as filtered by the method’s input arguments
+        ''' returns the first row found in the users table,
+        as filtered by the method’s input arguments.
+
+        Raises:
+            NoResultFound: if no user found
+            InvalidRequestError: wrong query arguments are passed
         '''
         return self._session.query(User).filter_by(**kw).one()
 
