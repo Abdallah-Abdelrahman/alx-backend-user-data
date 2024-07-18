@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-'''Module defines `_hash_password` function'''
+'''Module defines `_hash_password`, `_generate_uuid` functions and `Auth` class
+'''
 from typing import Union
 import uuid
 from sqlalchemy.orm.exc import NoResultFound
@@ -44,7 +45,7 @@ class Auth:
         except NoResultFound:
             return False
 
-    def create_session(self, email: str) -> str:
+    def create_session(self, email: str) -> Union[str, None]:
         '''Find the user corresponding to the email,
         generate a new UUID and store it in the database,
         as the user’s session_id
@@ -60,8 +61,6 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         '''Returns the corresponding User'''
-        if not session_id:
-            return None
         try:
             return self._db.find_user_by(session_id=session_id)
         except NoResultFound:
