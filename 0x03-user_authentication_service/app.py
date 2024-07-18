@@ -51,7 +51,7 @@ def logout():
     if not user:
         abort(403)
     AUTH.destroy_session(user.id)
-    redirect('/')
+    return redirect('/')
 
 
 @app.route('/profile', methods=['GET'])
