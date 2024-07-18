@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 '''Module defines `_hash_password` function'''
+from typing import Union
 import uuid
 from sqlalchemy.orm.exc import NoResultFound
 from db import DB
@@ -56,3 +57,9 @@ class Auth:
 
         except NoResultFound:
             pass
+
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+        '''Returns the corresponding User'''
+        if not session_id:
+            return None
+        return self._db.find_user_by(session_id=session_id)
