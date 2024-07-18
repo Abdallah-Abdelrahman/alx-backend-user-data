@@ -31,14 +31,12 @@ def login():
     '''Register new user'''
     email = request.form.get('email')
     password = request.form.get('password')
-    try:
-        # if this fails it will raise NoResultFound
-        AUTH.valid_login(email, password)
-    except NoResultFound:
+
+    if not AUTH.valid_login(email, password):
         abort(401)
 
     session_id = AUTH.create_session(email)
-    resp = make_response({
+    resp = jsonify({
         'email': email,
         'message': 'logged in'
     })
